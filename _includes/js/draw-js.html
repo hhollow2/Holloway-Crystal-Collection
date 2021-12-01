@@ -1,0 +1,36 @@
+<script type="text/javascript" language="javascript" src="{{ '/assets/lib/painterro-1.1.7.min.js' | absolute_url }}"></script>
+<script>
+    /* add item data */
+    var items = { 
+        {%- for item in site.data[site.metadata] -%}
+        {{ item.objectid | jsonify }} : { "format": {{ item.format | jsonify }}, {% if  item.filename contains '/' %}"filename": "{{ item.filename }}" {% else %}"filename":{{ '/objects/' | relative_url | append: item.filename | jsonify }}{% endif %} }{% unless forloop.last %}, {% endunless %}
+        {% endfor %}
+    };
+    /* get query id from URL */
+    var queryString = window.location.search.substring(1).split("=")[1];
+    var record = items[queryString];
+
+    if (record) {
+        var format = record.format;
+        var objectLink = record.filename;
+        if (format.includes('image')) {
+
+            Painterro({
+                hiddenTools: ['open', 'close'],
+                saveHandler: function (image, done) {
+                    
+                    var imagePage = "<img class='img-fluid d-block mx-auto m-3' src='" + image.asDataURL() + "'>"; 
+                    document.getElementById("maincontent").innerHTML = imagePage + "<div class='alert alert-success text-center m-3'>Right click on image and select <em>Save as</em></div>";
+                    done(true)
+                }
+
+            }).show(objectLink)
+        
+        } else {
+            document.getElementById("draw").innerHTML = "Unsupported file type";
+        }
+    } else {
+        document.getElementById("draw").innerHTML = "File not found";
+    }
+
+</script>
