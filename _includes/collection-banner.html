@@ -1,0 +1,43 @@
+{% if page.layout == "home-infographic" and page.banner-image %}
+<style>
+#home-banner {
+    background-image: url('{{ page.banner-image | relative_url }}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+{% if page.banner-y-padding %}
+#home-title-box {
+    padding-top: {{ page.banner-y-padding }};
+    padding-bottom: {{ page.banner-y-padding }};
+}{% endif %}
+.title-card {
+    background-color: #fff; /* fallback for IE */
+    background-color: rgba(255, 255, 255, 0.86);
+    border: 2px solid #191919;
+}
+</style>
+<div id="home-banner" class="jumbotron jumbotron-fluid mb-0" aria-label="">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div id="home-title-box" class="col-md-10">
+                <div class="text-dark title-card p-2 rounded text-center">
+                    <h1 class="display-4">{{ site.title }}</h1>
+                    {% if site.tagline %}<p>{{ site.tagline }}</p>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%- else -%}
+<div class="container">
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <h1 class="h3">
+                <a href="{{ '/' | absolute_url }}" >{{ site.title }}</a>
+                <small class="text-muted">| {{ site.tagline }}</small>
+            </h1>
+        </div>
+    </div>	
+</div>
+{%- endif -%}
